@@ -1,0 +1,38 @@
+# centos
+
+- name: Install
+  ansible.builtin.yum:
+    name: firewalld
+    state: present
+
+- name: Start the firewall
+  tags: serviceon
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Enable the firewall
+  tags: serviceon
+  service:
+    name: firewalld
+    state: restarted
+    enabled: yes
+
+- name: Allow incoming HTTP and HTTPS traffic
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    zone: public
+    state: enabled
+    immediate: yes
+    permanent: yes
+  loop:
+    - http
+    - https
+
+- name: Reload firewall
+  tags: serviceon
+  service:
+    name: firewalld
+    state: reloaded
+    enabled: yes

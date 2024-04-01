@@ -1,0 +1,28 @@
+# server1
+
+- name: Install UFW
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+
+- name: Start and enable firewall
+  tags: serviceon
+  service:
+    name: ufw
+    state: started
+    enabled: yes
+
+- name: Enable firewall
+  tags: serviceon
+  service:
+    name: ufw
+    state: restarted
+
+- name: Enable SSH access
+  ansible.builtin.command:
+    cmd: ufw allow OpenSSH
+
+- name: Reload firewall
+  ansible.builtin.command:
+    cmd: ufw reload
+
